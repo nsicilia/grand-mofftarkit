@@ -1,0 +1,5 @@
+<script>
+  // Apply the palette from the URL before first paint, so stories don't flash the default red and animate to it.
+  var m = location.search.match(/globals=[^&]*theme:(\w+)/)
+  if (m) document.documentElement.dataset.theme = m[1]
+</script>

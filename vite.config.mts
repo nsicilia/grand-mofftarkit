@@ -1,45 +1,48 @@
-import path from 'node:path'
+import { copyFileSync, mkdirSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
-import type { UserConfigExport } from 'vite'
+import type { Plugin, UserConfigExport } from 'vite'
 import dts from 'vite-plugin-dts'
 import { configDefaults, defineConfig } from 'vitest/config'
-import { name } from './package.json'
+import pkg from './package.json'
+
+// Everything the package declares is installed by the consumer, so none of it is bundled.
+// Matches subpaths too (react/jsx-runtime, react-day-picker/locale, …).
+const externals = [...Object.keys(pkg.dependencies), ...Object.keys(pkg.peerDependencies)]
+const isExternal = (id: string) => externals.some(dep => id === dep || id.startsWith(`${dep}/`))
+
+// Ships the Tailwind source theme for consumers who run Tailwind themselves.
+// Kept one level below dist/ so its `@source '../'` scans the built JS, exactly as it scans src/lib in this repo.
+const copyTailwindTheme = (): Plugin => ({
+  name: 'copy-tailwind-theme',
+  closeBundle() {
+    mkdirSync('dist/tailwind', { recursive: true })
+    copyFileSync('src/lib/tailwind/theme.css', 'dist/tailwind/theme.css')
+  },
+})
 
 const app = async (): Promise<UserConfigExport> => {
-  /**
-   * Removes everything before the last
-   * @octocat/library-repo -> library-repo
-   * vite-component-library-template -> vite-component-library-template
-   */
-  const formattedName = name.match(/[^/]+$/)?.[0] ?? name
-
   return defineConfig({
     plugins: [
       react(),
-      dts({
-        insertTypesEntry: true,
-      }),
+      dts({ insertTypesEntry: true, exclude: ['**/*.test.*', '**/*.stories.*', 'src/stories/**'] }),
       tailwindcss(),
+      copyTailwindTheme(),
     ],
-    resolve: { alias: { '@': path.resolve(__dirname, 'src/lib') } },
+    resolve: { alias: { '@': fileURLToPath(new URL('src/lib', import.meta.url)) } },
     build: {
       lib: {
-        entry: path.resolve(__dirname, 'src/lib/index.ts'),
-        name: formattedName,
-        formats: ['es', 'umd'],
-        fileName: format => `${formattedName}.${format}.js`,
+        entry: fileURLToPath(new URL('src/lib/index.ts', import.meta.url)),
+        formats: ['es', 'cjs'],
+        fileName: (format, entry) => `${entry}.${format === 'es' ? 'js' : 'cjs'}`,
+        cssFileName: 'styles',
       },
       rollupOptions: {
-        external: ['react', 'react/jsx-runtime', 'react-dom', 'tailwindcss'],
-        output: {
-          globals: {
-            react: 'React',
-            'react/jsx-runtime': 'react/jsx-runtime',
-            'react-dom': 'ReactDOM',
-            tailwindcss: 'tailwindcss',
-          },
-        },
+        external: isExternal,
+        // Every component is interactive; marks the bundle as a client module for React Server Components (Next.js).
+        // One file per component (preserveModules) so bundlers can skip unused components and their dependencies.
+        output: { banner: '"use client";', preserveModules: true, preserveModulesRoot: 'src/lib' },
       },
     },
     test: {

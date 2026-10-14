@@ -14,13 +14,42 @@ the shadcn docs remain the reference for props and behaviour. Only the styling c
 ## Install
 
 ```bash
-pnpm add grand-mofftarkit
+npm install grand-mofftarkit   # or pnpm add / yarn add / bun add
 ```
 
-Import the stylesheet **once**, at the root of your app, then use components anywhere:
+**Requirements:** React 19 and React DOM 19 (peer dependencies). Everything else the components use
+(Radix, Recharts, Sonner…) installs automatically and is shared with your app, so there's never a second copy.
+
+Works with any React setup: Vite, Next.js (App Router and Pages Router), Remix / React Router,
+Astro islands, plain webpack. ESM and CommonJS builds and full TypeScript types are included.
+Every module is marked `"use client"`, so components can be dropped straight into Next.js Server Components.
+Your bundler only includes the components you actually import.
+
+### Styles: pick one
+
+**A. No Tailwind in your app (or you don't want to configure it).** Import the prebuilt stylesheet once at the root:
 
 ```tsx
 import 'grand-mofftarkit/styles.css'
+```
+
+It contains everything the components need, including a small CSS reset. Your own markup can use the
+CSS variables (`var(--primary)`, `var(--border)`…) but not Tailwind classes.
+
+**B. Your app uses Tailwind CSS v4.** Replace your `@import "tailwindcss";` with the library's theme,
+so your own code can use the same tokens and utilities (`bg-primary`, `text-phosphor`, `chamfer`, `hud-corners`…):
+
+```css
+/* app.css */
+@import "grand-mofftarkit/tailwind.css";
+```
+
+This imports Tailwind for you and scans the library's components, so don't also import `styles.css`.
+Note that the theme makes Tailwind's `dark:` variant always active, because the system is dark-only.
+
+### Use
+
+```tsx
 import { Button, Card, CardHeader, CardTitle, CardContent } from 'grand-mofftarkit'
 
 export function Reactor() {
