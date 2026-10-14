@@ -43,7 +43,15 @@ import {
 } from '@/index'
 
 const meta = {
-  title: 'Design System/Showcase',
+  parameters: {
+    docs: {
+      description: {
+        component:
+          'A full screen combining cards, forms, dialogs, tabs and alerts. Use it to check the palettes on real layouts.',
+      },
+    },
+  },
+  title: 'Examples/Bridge Console',
   component: Button,
 } satisfies Meta<typeof Button>
 

@@ -1,5 +1,5 @@
 {
-  "name": "vite-component-library-template",
+  "name": "grand-mofftarkit",
   "private": false,
   "version": "3.0.1",
   "packageManager": "pnpm@10.12.1",
@@ -7,16 +7,16 @@
     "type": "git",
     "url": "https://github.com/IgnacioNMiranda/vite-component-library-template"
   },
-  "main": "./dist/vite-component-library-template.umd.js",
-  "module": "./dist/vite-component-library-template.es.js",
+  "main": "./dist/grand-mofftarkit.umd.js",
+  "module": "./dist/grand-mofftarkit.es.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/vite-component-library-template.es.js",
-      "require": "./dist/vite-component-library-template.umd.js"
+      "import": "./dist/grand-mofftarkit.es.js",
+      "require": "./dist/grand-mofftarkit.umd.js"
     },
-    "./styles.css": "./dist/vite-component-library-template.css"
+    "./styles.css": "./dist/grand-mofftarkit.css"
   },
   "engines": {
     "node": ">=22"
@@ -29,17 +29,28 @@
     "format": "npx @biomejs/biome check --write --organize-imports-enabled=true ./src",
     "test": "vitest",
     "test:cov": "vitest run --coverage",
-    "prepack": "json -f package.json -I -e \"delete this.devDependencies; delete this.dependencies\""
+    "prepack": "json -f package.json -I -e \"delete this.devDependencies; delete this.dependencies\"",
+    "typecheck": "tsc --noEmit -p tsconfig.stories.json"
   },
   "dependencies": {
+    "@base-ui/react": "^1.9.0",
+    "@shadcn/react": "^0.3.1",
     "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "cn": "^0.4.0",
+    "cmdk": "^1.1.1",
+    "cn": "0.4.0",
+    "date-fns": "^4.4.0",
+    "embla-carousel-react": "^8.6.0",
+    "input-otp": "^1.5.0",
     "lucide-react": "^1.56.0",
     "radix-ui": "^1.8.1",
     "react": "19.1.0",
+    "react-day-picker": "^10.0.2",
     "react-dom": "19.1.0",
-    "tailwind-merge": "^3.7.0"
+    "react-hook-form": "^7.90.0",
+    "react-resizable-panels": "^4.14.5",
+    "recharts": "3.8.0",
+    "sonner": "^2.0.8",
+    "vaul": "^1.1.2"
   },
   "devDependencies": {
     "@babel/core": "7.27.4",

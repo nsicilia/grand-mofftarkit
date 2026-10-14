@@ -43,6 +43,12 @@
           }
         }
       }
+    },
+    {
+      "includes": ["src/lib/components/ui/**"],
+      "linter": {
+        "enabled": false
+      }
     }
   ]
 }

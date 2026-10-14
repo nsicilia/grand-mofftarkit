@@ -1,0 +1,83 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Foundations/Introduction" />
+
+# Grand Moff Tarkit
+
+A React component library built on [shadcn/ui](https://ui.shadcn.com), restyled after the
+in-universe displays of the Star Wars films: phosphor-coloured line work on black glass, cut corners,
+HUD brackets, scanlines and targeting grids.
+
+Every component keeps the **exact shadcn API**. If you know shadcn, you already know this library;
+the shadcn docs remain the reference for props and behaviour. Only the styling changed.
+
+## Install
+
+```bash
+pnpm add grand-mofftarkit
+```
+
+Import the stylesheet **once**, at the root of your app, then use components anywhere:
+
+```tsx
+import 'grand-mofftarkit/styles.css'
+import { Button, Card, CardHeader, CardTitle, CardContent } from 'grand-mofftarkit'
+
+export function Reactor() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Reactor core</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Button>Engage</Button>
+      </CardContent>
+    </Card>
+  )
+}
+```
+
+Two providers are needed only if you use the matching components:
+
+| Component        | Wrap your app in    |
+| ---------------- | ------------------- |
+| `Tooltip`        | `<TooltipProvider>` |
+| `toast()` (Sonner) | render `<Toaster />` once |
+| `Sidebar`        | `<SidebarProvider>` |
+
+## Pick a console palette
+
+The system is dark-only. Set `data-theme` on `<html>` (or on any element, to theme just that subtree):
+
+```html
+<html data-theme="imperial">  <!-- red, the default -->
+<html data-theme="blueprint"> <!-- blue technical readouts -->
+<html data-theme="rebel">     <!-- amber targeting computers -->
+<html data-theme="terminal">  <!-- green CRT -->
+```
+
+Use the **paintbrush** in the Storybook toolbar to preview every story in each palette.
+See [Foundations/Themes](?path=/docs/foundations-themes--docs) for how a palette is built.
+
+## How to read these docs
+
+- **Foundations**: palettes, colour tokens, type and the sci-fi utility classes (`chamfer`, `hud-corners`, …).
+- **Component pages**: one per shadcn component, grouped by job (Actions, Forms, Data Display, Feedback,
+  Overlays, Navigation, Layout, Chat). Every page has:
+  - a short **when to use** note and the import line,
+  - a **Playground** story whose props you can edit in the Controls panel,
+  - focused stories for each variant or common pattern. Hit **Show code** to copy the JSX.
+- **Examples**: full screens that combine many components.
+
+## Adding a component
+
+Components live in `src/lib/components/ui` and are added with the shadcn CLI:
+
+```bash
+pnpm dlx shadcn@latest add <component>
+```
+
+If the CLI asks to overwrite an existing file, answer **no**: those files carry the custom styling.
+The CLI drops in the stock shadcn version. To match the system, apply the same conventions used by the
+others: no rounded corners, `shadow-glow` instead of focus rings, uppercase tracked titles in `text-primary`,
+and `font-mono` for data. Then add a story in `src/stories/<group>/` and export it from `src/lib/index.ts`.

@@ -1,45 +1,54 @@
-# ⚛️⚡ Vite + React + Typescript Component Library Template
+# Grand Moff Tarkit
 
-## Features
+A React component library built on [shadcn/ui](https://ui.shadcn.com), restyled after the in-universe displays of the
+Star Wars films: phosphor line work on black glass, cut corners, HUD brackets, scanlines and targeting grids.
 
-- ♥️ [Node 22](https://nodejs.org/en/download)
-- ⚛️ [React 19](https://reactjs.org/)
-- 📚 [Storybook 9](https://storybook.js.org/) - Components preview
-- 🖌️ [Tailwind CSS 4](https://tailwindcss.com/)
-- ⏩ [Vite](https://vitejs.dev/) - Run and build the project blazingly fast!
-- ⚡ [Vitest](https://vitest.dev/) - Components Unit Testing
-- 📐 [Biome](https://biomejs.dev/) - Formatting and Linting
-- 🌟 [Typescript](https://www.typescriptlang.org/)
-- 🐶 [Husky](https://typicode.github.io/husky) & [Lint Staged](https://www.npmjs.com/package/lint-staged) - Pre-commit Hooks
-- ⏰ [Release Please](https://github.com/googleapis/release-please) — Generate the changelog with the release-please workflow
-- 👷 [Github Actions](https://github.com/features/actions) — Releasing versions to NPM
-- Initial components setup using [Atomic Design](https://bradfrost.com/blog/post/atomic-web-design/)
+All 58 shadcn components keep their exact shadcn API; only the styling changed. Four console palettes
+(`imperial`, `blueprint`, `rebel`, `terminal`) are switched with a `data-theme` attribute.
 
-## Getting Started
+## Usage
 
-1. Create a new repository using this one as template
-2. Clone your repo
-3. Install dependencies with `pnpm i` (first run `corepack enable` to enable pnpm)
+```tsx
+import 'grand-mofftarkit/styles.css'
+import { Button } from 'grand-mofftarkit'
 
-## Main Scripts
+<html data-theme="imperial">…<Button>Engage</Button>…</html>
+```
 
-Always prepending pnpm:
+Full documentation, with a live example of every component, lives in Storybook (`pnpm dev`).
+Start at **Foundations / Introduction**.
 
-- `dev`: Bootstrap the Storybook preview with Hot Reload.
-- `build`: Builds the static storybook project.
-- `build:lib`: Builds the component library into the **dist** folder.
-- `lint`: Applies linting based on the rules defined in **biome.json**.
-- `format`: Formats files using the biome rules defined in **biome.json**.
-- `test`: Runs testing using watch mode.
-- `test:cov`: Runs testing displaying a coverage report.
+## Development
 
-## Blog Post
+Install dependencies with `pnpm i` (run `corepack enable` first to enable pnpm).
 
-I created a post explaning how to set up this library and publish it to a package registry! You can read it [here](https://igna.hashnode.dev/vite-react-typescript-component-library-template-setup-explanation).
+| Script | What it does |
+| --- | --- |
+| `pnpm dev` | Storybook with hot reload on http://localhost:6006 |
+| `pnpm build` | Static Storybook in `storybook-static/` |
+| `pnpm build:lib` | Library bundle and types in `dist/` |
+| `pnpm typecheck` | Type-checks the library, stories and Storybook config |
+| `pnpm test` | Vitest in watch mode (`pnpm test:cov` for coverage) |
+| `pnpm lint` / `pnpm format` | Biome |
 
-## Author
+### Layout
 
-[Ignacio Miranda Figueroa](https://www.linkedin.com/in/ignacio-miranda-figueroa/)
+```
+src/lib/components/ui/   shadcn components (restyled)
+src/lib/tailwind/theme.css   palettes, tokens and sci-fi utilities
+src/lib/index.ts         public exports
+src/stories/             Storybook docs, grouped by category
+```
+
+### Adding a shadcn component
+
+```bash
+pnpm dlx shadcn@latest add <component>
+```
+
+If the CLI asks to overwrite an existing file, answer **no**: those files carry the custom styling.
+Then restyle the new file to match (see the Introduction page in Storybook), export it from `src/lib/index.ts`,
+and add a story under `src/stories/`.
 
 ## License
 
