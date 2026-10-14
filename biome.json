@@ -32,5 +32,17 @@
       "trailingCommas": "all",
       "indentStyle": "space"
     }
-  }
+  },
+  "overrides": [
+    {
+      "includes": ["**/*.stories.tsx"],
+      "linter": {
+        "rules": {
+          "nursery": {
+            "useUniqueElementIds": "off"
+          }
+        }
+      }
+    }
+  ]
 }

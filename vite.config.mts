@@ -22,6 +22,7 @@ const app = async (): Promise<UserConfigExport> => {
       }),
       tailwindcss(),
     ],
+    resolve: { alias: { '@': path.resolve(__dirname, 'src/lib') } },
     build: {
       lib: {
         entry: path.resolve(__dirname, 'src/lib/index.ts'),
